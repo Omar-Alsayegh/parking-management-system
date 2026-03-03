@@ -1,65 +1,164 @@
-import Image from "next/image";
+import { fetchAllUsers } from "@/services/userService";
+import { fetchAllParkings } from "@/services/parkingService";
+import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const users = await fetchAllUsers();
+  const parkings = await fetchAllParkings();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main style={styles.container}>
+      <h1 style={styles.title}>Parking Management Admin Panel</h1>
+
+      <div style={styles.grid}>
+        {/* USERS */}
+        <section style={styles.card}>
+          <div style={styles.cardHeader}>
+            <h2>Users</h2>
+            <Link href="/register" style={styles.primaryBtn}>
+              + Add User
+            </Link>
+          </div>
+
+          {users.length === 0 ? (
+            <p style={styles.empty}>No users found.</p>
+          ) : (
+            users.map((user) => (
+              <div key={user.id} style={styles.item}>
+                <div>
+                  <div style={styles.bold}>{user.name}</div>
+                  <div style={styles.muted}>{user.email}</div>
+                  <div style={styles.badge}>{user.role}</div>
+                </div>
+                <div style={styles.actions}>
+                  <Link href={`/edit-user/${user.id}`} style={styles.link}>
+                    Edit
+                  </Link>
+                  <Link href={`/delete-user/${user.id}`} style={styles.danger}>
+                    Delete
+                  </Link>
+                </div>
+              </div>
+            ))
+          )}
+        </section>
+
+        {/* PARKINGS */}
+        <section style={styles.card}>
+          <div style={styles.cardHeader}>
+            <h2>Parkings</h2>
+            <Link href="/add-parking" style={styles.primaryBtn}>
+              + Add Parking
+            </Link>
+          </div>
+
+          {parkings.length === 0 ? (
+            <p style={styles.empty}>No parkings found.</p>
+          ) : (
+            parkings.map((parking) => (
+              <div key={parking.id} style={styles.item}>
+                <div>
+                  <div style={styles.bold}>{parking.name}</div>
+                  <div style={styles.muted}>{parking.location}</div>
+                  <div>${parking.price_per_hour}/hr</div>
+                  <div style={styles.status}>{parking.status}</div>
+                </div>
+                <div style={styles.actions}>
+                  <Link href={`/edit-parking/${parking.id}`} style={styles.link}>
+                    Edit
+                  </Link>
+                  <Link href={`/delete-parking/${parking.id}`} style={styles.danger}>
+                    Delete
+                  </Link>
+                </div>
+              </div>
+            ))
+          )}
+        </section>
+      </div>
+    </main>
   );
 }
+
+const styles: any = {
+  container: {
+    padding: "50px",
+    fontFamily: "Inter, sans-serif",
+    backgroundColor: "#f5f7fa",
+    minHeight: "100vh",
+  },
+  title: {
+    marginBottom: "40px",
+    fontSize: "28px",
+  },
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "30px",
+  },
+  card: {
+    background: "#ffffff",
+    borderRadius: "12px",
+    padding: "25px",
+    boxShadow: "0 8px 20px rgba(0,0,0,0.05)",
+  },
+  cardHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "20px",
+  },
+  item: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "12px 0",
+    borderBottom: "1px solid #eee",
+  },
+  bold: {
+    fontWeight: 600,
+  },
+  muted: {
+    fontSize: "13px",
+    color: "#666",
+  },
+  badge: {
+    marginTop: "4px",
+    fontSize: "12px",
+    background: "#e0f0ff",
+    color: "#0070f3",
+    padding: "3px 8px",
+    borderRadius: "6px",
+    display: "inline-block",
+  },
+  status: {
+    fontSize: "12px",
+    marginTop: "4px",
+    color: "#555",
+  },
+  actions: {
+    display: "flex",
+    gap: "12px",
+  },
+  link: {
+    textDecoration: "none",
+    color: "#0070f3",
+    fontSize: "14px",
+  },
+  danger: {
+    textDecoration: "none",
+    color: "#e5484d",
+    fontSize: "14px",
+  },
+  primaryBtn: {
+    background: "#0070f3",
+    color: "white",
+    padding: "8px 14px",
+    borderRadius: "8px",
+    textDecoration: "none",
+    fontSize: "14px",
+  },
+  empty: {
+    color: "#888",
+  },
+};
