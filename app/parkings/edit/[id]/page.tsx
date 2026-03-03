@@ -6,18 +6,16 @@ import Link from "next/link";
 import Spinner from "@/components/Spinner";
 
 export default function EditParkingPage({ params }: { params: Promise<{ id: string }> }) {
-  // 1. Resolve dynamic ID
   const resolvedParams = use(params);
   const id = resolvedParams.id;
   const router = useRouter();
 
   const [name, setName] = useState("");
-  const [slots, setSlots] = useState<string | number>("");
+  const [slots, setSlots] = useState<string | number>(""); 
   const [status, setStatus] = useState("Active");
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
 
-  // 2. Pre-fill form with existing parking data
   useEffect(() => {
     const fetchParking = async () => {
       try {
@@ -25,9 +23,9 @@ export default function EditParkingPage({ params }: { params: Promise<{ id: stri
         if (!res.ok) throw new Error("Parking not found");
         const data = await res.json();
         
-        setName(data.name);
-        setSlots(data.slots);
-        setStatus(data.status);
+        setName(data.name || "");
+        setSlots(data.total_slots ?? ""); 
+        setStatus(data.status || "Active");
       } catch (err) {
         console.error("Fetch error:", err);
       } finally {
@@ -37,14 +35,13 @@ export default function EditParkingPage({ params }: { params: Promise<{ id: stri
     fetchParking();
   }, [id]);
 
-  // 3. Handle PUT request
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setUpdating(true);
 
     const updatedParking = {
       name,
-      slots: Number(slots),
+      total_slots: Number(slots),
       status,
     };
 
@@ -57,8 +54,8 @@ export default function EditParkingPage({ params }: { params: Promise<{ id: stri
 
       if (!res.ok) throw new Error("Failed to update parking");
 
-      router.refresh(); // Sync server components
-      router.push("/parkings"); // Redirect to list
+      router.refresh(); 
+      router.push("/dashboard"); 
     } catch (err) {
       console.error("Update error:", err);
       alert("Error updating parking zone.");
@@ -74,7 +71,7 @@ export default function EditParkingPage({ params }: { params: Promise<{ id: stri
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 w-full max-w-lg">
         <div className="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
           <h1 className="text-2xl font-bold text-slate-900">Edit Parking Zone</h1>
-          <Link href="/parkings" className="text-sm text-slate-400 hover:text-indigo-600 transition">
+          <Link href="/dashboard" className="text-sm text-slate-400 hover:text-indigo-600 transition">
             Cancel
           </Link>
         </div>
@@ -95,7 +92,7 @@ export default function EditParkingPage({ params }: { params: Promise<{ id: stri
             <label className="block text-sm font-medium text-slate-600 mb-1">Total Slots</label>
             <input
               type="number"
-              value={slots}
+              value={slots ?? ""} 
               onChange={(e) => setSlots(e.target.value)}
               className="w-full border border-slate-200 px-4 py-2 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
               required

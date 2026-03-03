@@ -5,13 +5,11 @@ import {
   deleteParkingService,
 } from "@/services/parkingService";
 
-// --- GET: Fetch Single Parking ---
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ id: string }> } // 1. Change to Promise
+  { params }: { params: Promise<{ id: string }> } 
 ) {
   try {
-    // 2. Await the params!
     const { id } = await params;
     const parkingId = Number(id);
 
@@ -29,12 +27,11 @@ export async function GET(
   } catch (error: any) {
     return NextResponse.json(
       { error: error.message },
-      { status: 500 } // Changed to 500 for general server errors
+      { status: 500 }
     );
   }
 }
 
-// --- PUT: Update Parking ---
 export async function PUT(
   req: NextRequest, 
   { params }: { params: Promise<{ id: string }> } 
@@ -49,14 +46,12 @@ export async function PUT(
 
     const body = await req.json();
 
-    // Service signature check: ensure these keys exist in your incoming 'body'
+    // ✅ FIX: Map 'slots' from frontend to 'total_slots' for the service
+    // We use (body.total_slots ?? body.slots) to be safe for both names.
     await updateParkingService(
       parkingId,
       body.name,
-      body.location,
-      body.description,
-      body.price_per_hour,
-      body.total_slots,
+      Number(body.total_slots ?? body.slots), 
       body.status
     );
 
@@ -65,12 +60,11 @@ export async function PUT(
     console.error("Update Error:", error.message);
     return NextResponse.json(
       { message: error.message || "Failed to update parking" },
-      { status: 400 }
+      { status: 400 } // This is where your "Bind parameters" error was being caught
     );
   }
 }
 
-// --- DELETE: Remove Parking ---
 export async function DELETE(
   req: NextRequest, 
   { params }: { params: Promise<{ id: string }> }

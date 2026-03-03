@@ -8,7 +8,7 @@ import Spinner from "@/components/Spinner";
 interface Parking {
   id: number | string;
   name: string;
-  slots: number;
+  total_slots: number;
   status: string;
 }
 
@@ -74,7 +74,7 @@ export default function ParkingDetailsPage({ params }: { params: Promise<{ id: s
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <DetailBlock label="Location Name" value={parking.name} />
-          <DetailBlock label="Total Slots" value={`${parking.slots} Spaces`} />
+          <DetailBlock label="Total Slots" value={`${parking.total_slots} Spaces`} />
           <DetailBlock label="Internal ID" value={`#${parking.id}`} />
           <DetailBlock label="Operational Status" value={parking.status} />
         </div>

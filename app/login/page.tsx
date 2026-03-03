@@ -1,11 +1,10 @@
-'use client'; // 1. Add this at the very top
+'use client'; 
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // 2. Changed from react-router-dom
+import { useRouter } from "next/navigation"; 
 
-// Removed {setAdmin} prop for now - Next.js handles state differently
 export default function Login() {
-  const router = useRouter(); // 3. Changed from useNavigate
+  const router = useRouter(); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -17,22 +16,19 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // 4. Changed URL to point to YOUR Next.js API
       const res = await fetch("/api/users"); 
       const usersData = await res.json();
 
-      // Look for the user in your database response
       const admin = usersData.find(
         (a: any) =>
           a.email.toLowerCase().trim() === email.toLowerCase().trim() &&
-          a.role === "admin" // Checking role instead of just a separate table
+          a.role === "admin" 
       );
 
       if (admin) {
-        // Note: Password checking should ideally happen on the backend, 
-        // but keeping his logic for now to get you running.
+
         localStorage.setItem("admin", JSON.stringify(admin));
-        router.push("/"); // 5. Changed from navigate("/")
+        router.push("/"); 
       } else {
         setError("Invalid email or unauthorized role");
       }
@@ -52,7 +48,7 @@ export default function Login() {
           <label>Email</label>
           <input
             type="email"
-            className="text-black" // Added this in case text is white on white
+            className="text-black" 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required

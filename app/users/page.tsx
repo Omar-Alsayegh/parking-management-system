@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Spinner from "@/components/Spinner"; // Ensure this path is correct after your rename
+import Spinner from "@/components/Spinner"; 
 
 export default function UsersPage() {
   const [users, setUsers] = useState<any[]>([]);
@@ -75,7 +75,6 @@ export default function UsersPage() {
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-          {/* Regular Users Table */}
           <UserTable 
             title="Regular Users" 
             data={users} 
@@ -83,7 +82,6 @@ export default function UsersPage() {
             router={router} 
           />
 
-          {/* Admin Users Table */}
           <UserTable 
             title="Admins" 
             data={admins} 
@@ -97,7 +95,6 @@ export default function UsersPage() {
   );
 }
 
-// Sub-component for the tables to keep code clean
 function UserTable({ title, data, onDelete, router, isAdminTable = false }: any) {
   return (
     <div className="overflow-hidden">

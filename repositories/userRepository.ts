@@ -26,7 +26,6 @@ export const createUser = async (
   hashedPassword: string,
   role: string
 ): Promise<number> => {
-  // Check: Do you have 4 columns and 4 question marks?
   const [result]: any = await db.execute(
     "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
     [name, email, hashedPassword, role]

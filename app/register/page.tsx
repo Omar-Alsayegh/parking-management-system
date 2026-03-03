@@ -120,7 +120,7 @@
 'use client';
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Next.js Navigation
+import { useRouter } from "next/navigation"; 
 import Link from "next/link";
 
 export default function AddUserPage() {
@@ -128,7 +128,7 @@ export default function AddUserPage() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("user"); // Match your DB lowercase roles
+  const [role, setRole] = useState("user"); 
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -138,7 +138,6 @@ export default function AddUserPage() {
     setSubmitting(true);
     setError("");
 
-    // Prepare data - keeping it clean for your ready API
     const bodyData = {
       name,
       email,
@@ -158,10 +157,7 @@ export default function AddUserPage() {
         throw new Error(errData.error || "Failed to create user");
       }
 
-      // Success! 
-      // 1. Refresh the server cache so the Dashboard shows the new user
       router.refresh(); 
-      // 2. Redirect back to the dashboard
       router.push("/dashboard");
       
     } catch (err: any) {

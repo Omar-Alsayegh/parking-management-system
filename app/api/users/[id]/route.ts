@@ -5,7 +5,6 @@ import {
   deleteUserService 
 } from "@/services/userService";
 
-// GET: Fetch a single user
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
@@ -17,21 +16,18 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     }
 }
 
-// PUT: Update user details
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const body = await req.json();
     const userId = Number(id);
 
-    // FIX: Extract fields from body to match the service arguments
-    // Service signature: (id, name, email, role, updated_by)
     await updateUserService(
         userId, 
         body.name, 
         body.email, 
         body.role, 
-        body.updated_by || null // Default to null if not provided
+        body.updated_by || null
     );
 
     return NextResponse.json({ message: "User updated successfully" });
@@ -43,7 +39,6 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   }
 }
 
-// DELETE: Remove a user
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;

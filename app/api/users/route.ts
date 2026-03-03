@@ -14,7 +14,6 @@ export async function POST(request: Request) {
     try {
         const body = await request.json();
         
-        // Validation: Ensure nothing is undefined before hitting the service
         if (!body.name || !body.email || !body.password) {
             return NextResponse.json({ error: "Missing required fields: name, email, or password" }, { status: 400 });
         }

@@ -13,7 +13,6 @@ interface User {
 }
 
 export default function UserDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-  // In Next.js 15+, params is a Promise
   const resolvedParams = use(params);
   const id = resolvedParams.id;
 
@@ -94,7 +93,6 @@ export default function UserDetailsPage({ params }: { params: Promise<{ id: stri
   );
 }
 
-// Simple helper component for layout
 function DetailRow({ label, value }: { label: string, value: string }) {
   return (
     <div>
