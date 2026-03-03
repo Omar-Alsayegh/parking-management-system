@@ -52,3 +52,7 @@ export const deleteUserService = async (
   const deleted = await userRepo.deleteUserRepository(id);
   if (!deleted) throw new Error("User not found");
 };
+
+export const getAdminsService = async (): Promise<User[]> => {
+  return await userRepo.getAdmins();
+};

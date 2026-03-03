@@ -61,3 +61,10 @@ export const deleteUserRepository = async (
 
   return result.affectedRows > 0;
 };
+
+export const getAdmins = async (): Promise<User[]> => {
+  const [rows] = await db.query(
+    "SELECT id, name, email, role, created_at, updated_at, updated_by FROM users WHERE role = 'admin'"
+  );
+  return rows as User[];
+}
