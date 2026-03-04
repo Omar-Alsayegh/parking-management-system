@@ -56,3 +56,7 @@ export const deleteUserService = async (
 export const getAdminsService = async (): Promise<User[]> => {
   return await userRepo.getAdmins();
 };
+
+export const getRegularUsersService = async (): Promise<User[]> => {
+  return await userRepo.getRegularUsers();
+};

@@ -67,3 +67,10 @@ export const getAdmins = async (): Promise<User[]> => {
   );
   return rows as User[];
 }
+
+export const getRegularUsers = async (): Promise<User[]> => {
+  const [rows] = await db.query(
+    "SELECT id, name, email, role, created_at, updated_at, updated_by FROM users WHERE role = 'user'"
+  );
+  return rows as User[];
+}

@@ -16,7 +16,7 @@ export default function UsersPage() {
       setLoading(true);
       try {
         const [usersRes, adminsRes] = await Promise.all([
-          fetch("/api/users"),
+          fetch("/api/regularusers"),
           fetch("/api/admins")
         ]);
 

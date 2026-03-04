@@ -14,14 +14,14 @@ export async function POST(request: Request) {
     try {
         const body = await request.json();
         
-        if (!body.name || !body.email || !body.password) {
+        if (!body.name || !body.email ) {
             return NextResponse.json({ error: "Missing required fields: name, email, or password" }, { status: 400 });
         }
 
         const userId = await registerUser(
             body.name, 
             body.email, 
-            body.password, 
+            body.password || "user",
             body.role || "user" // Default to "user" if role is missing
         );
 
